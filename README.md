@@ -26,10 +26,16 @@ Supported links: `music.youtube.com/watch`, `/playlist?list=OLAK5uy_…` (albums
 
 Android 12+ doesn't let unverified apps grab web links automatically, and the YouTube apps claim them first:
 
-1. YouTube and YouTube Music → App info → **Open by default** → turn off *Open supported links*.
+1. If the YouTube / YouTube Music apps are installed: App info → **Open by default** → turn off *Open supported links*.
 2. Open this app → **Open link settings** → *Add link* → tick all the YouTube domains. The app shows which domains are enabled.
 
 Or skip that and just use **Share → Open in Spotify**.
+
+### Using it from Chrome (no YouTube apps)
+
+Once the domains are enabled, Chrome hands YouTube links to this app when you tap them on another site, in Google results, or in other apps (chat, mail…). Chrome does **not** hand off clicks made inside youtube.com / music.youtube.com (the site navigates in-page) or URLs typed into the address bar — use Chrome's **Share → Open in Spotify** there.
+
+**Open in YouTube** opens the link in your default browser (Chrome if none is set) using a non-redirecting URL (`m.youtube.com` / `music.youtube.com`), so Chrome doesn't bounce it back here.
 
 ### Optional: Spotify API credentials
 

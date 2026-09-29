@@ -14,6 +14,12 @@ sealed class YouTubeLink {
     /** URL on www.youtube.com, which the oEmbed endpoint accepts. */
     abstract val oEmbedUrl: String?
 
+    /**
+     * URL for the browser escape hatch that loads without redirects on a phone
+     * (youtu.be and www.youtube.com both redirect, m.youtube.com / music.youtube.com don't).
+     */
+    abstract val browserUrl: String
+
     data class Video(
         override val originalUrl: String,
         override val isMusic: Boolean,
@@ -23,6 +29,9 @@ sealed class YouTubeLink {
             get() = if (isMusic) "https://music.youtube.com/watch?v=$videoId"
             else "https://www.youtube.com/watch?v=$videoId"
         override val oEmbedUrl: String get() = "https://www.youtube.com/watch?v=$videoId"
+        override val browserUrl: String
+            get() = if (isMusic) "https://music.youtube.com/watch?v=$videoId"
+            else "https://m.youtube.com/watch?v=$videoId"
     }
 
     data class Playlist(
@@ -37,6 +46,9 @@ sealed class YouTubeLink {
             get() = if (isMusic) "https://music.youtube.com/playlist?list=$listId"
             else "https://www.youtube.com/playlist?list=$listId"
         override val oEmbedUrl: String get() = "https://www.youtube.com/playlist?list=$listId"
+        override val browserUrl: String
+            get() = if (isMusic) "https://music.youtube.com/playlist?list=$listId"
+            else "https://m.youtube.com/playlist?list=$listId"
     }
 
     /** music.youtube.com/browse/MPREb_... (album pages) and similar. */
@@ -48,6 +60,7 @@ sealed class YouTubeLink {
         val isAlbum: Boolean get() = browseId.startsWith("MPREb_")
         override val canonicalUrl: String get() = "https://music.youtube.com/browse/$browseId"
         override val oEmbedUrl: String? get() = null
+        override val browserUrl: String get() = canonicalUrl
     }
 
     companion object {

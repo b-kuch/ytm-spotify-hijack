@@ -146,7 +146,7 @@ class HijackActivity : Activity() {
         if (done) return
         done = true
         cancelCountdown()
-        Launchers.openInYouTube(this, url, link.isMusic)
+        Launchers.openInYouTube(this, url, link.isMusic, link.browserUrl)
         finish()
     }
 

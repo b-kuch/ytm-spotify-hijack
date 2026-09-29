@@ -22,6 +22,10 @@ class LinkParsingTest {
         assertEquals("dQw4w9WgXcQ", (YouTubeLink.parse("https://youtu.be/dQw4w9WgXcQ?si=xyz") as YouTubeLink.Video).videoId)
         assertEquals("dQw4w9WgXcQ", (YouTubeLink.parse("https://youtube.com/shorts/dQw4w9WgXcQ") as YouTubeLink.Video).videoId)
         assertFalse(YouTubeLink.parse("https://youtu.be/dQw4w9WgXcQ")!!.isMusic)
+        assertEquals("https://m.youtube.com/watch?v=dQw4w9WgXcQ",
+            YouTubeLink.parse("https://youtu.be/dQw4w9WgXcQ?si=xyz")!!.browserUrl)
+        assertEquals("https://music.youtube.com/watch?v=dQw4w9WgXcQ",
+            YouTubeLink.parse("https://music.youtube.com/watch?v=dQw4w9WgXcQ&si=1")!!.browserUrl)
     }
 
     @Test
