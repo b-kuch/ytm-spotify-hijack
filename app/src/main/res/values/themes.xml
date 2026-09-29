@@ -1,0 +1,12 @@
+<resources>
+    <style name="Theme.App" parent="@android:style/Theme.Material.Light.DarkActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:colorPrimary">@color/accent</item>
+        <item name="android:colorPrimaryDark">@color/accent_dark</item>
+    </style>
+
+    <style name="Theme.Hijack" parent="@android:style/Theme.Material.Light.Dialog.NoActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+</resources>

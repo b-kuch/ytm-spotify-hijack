@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">YT → Spotify</string>
+    <string name="share_label">Open in Spotify</string>
+
+    <string name="hijack_title">Opening in Spotify</string>
+    <string name="looking_up">Looking it up…</string>
+    <string name="opening_in">Opening in Spotify in %d s</string>
+    <string name="searching_in">No exact match — searching Spotify in %d s</string>
+    <string name="open_youtube">Open in YouTube</string>
+    <string name="open_spotify">Spotify now</string>
+    <string name="no_link">No link found</string>
+    <string name="not_youtube">Not a YouTube link</string>
+    <string name="not_music">Doesn\'t look like music — opening YouTube</string>
+
+    <string name="enabled">Redirect YouTube links to Spotify</string>
+    <string name="enabled_hint">When off, links go straight to YouTube. Sharing a link to \"Open in Spotify\" still works.</string>
+    <string name="handle_regular">Also handle regular youtube.com links</string>
+    <string name="handle_regular_hint">Only videos that turn out to be music go to Spotify; everything else is passed to YouTube.</string>
+    <string name="delay_label">Escape-hatch window: %.1f s</string>
+    <string name="delay_hint">How long the \"Open in YouTube\" button stays up before Spotify opens.</string>
+
+    <string name="setup_header">Make links open here</string>
+    <string name="setup_body">1. In the YouTube and YouTube Music apps\' settings (App info → Open by default) turn OFF \"Open supported links\".\n2. Tap the button below → \"Add link\" and tick all youtube.com / youtu.be domains.\n\nAlternatively just use Share → \"Open in Spotify\" from any YouTube app.</string>
+    <string name="open_link_settings">Open link settings</string>
+    <string name="link_status_legacy">Android 11 or older: choose this app when Android asks how to open a YouTube link.</string>
+    <string name="link_status_unknown">Couldn\'t read link-handling state.</string>
+    <string name="link_handling_off">⚠️ \"Open supported links\" is off for this app.</string>
+
+    <string name="spotify_header">Spotify API (optional)</string>
+    <string name="spotify_body">Without credentials, songs Odesli can\'t match open as a Spotify search. With a free app from developer.spotify.com (Client ID + Secret) they open the best match directly.</string>
+    <string name="client_id">Client ID</string>
+    <string name="client_secret">Client secret</string>
+
+    <string name="test_header">Try it</string>
+    <string name="test_hint">Paste a YouTube / YT Music link</string>
+    <string name="paste">Paste</string>
+    <string name="test">Test</string>
+</resources>
