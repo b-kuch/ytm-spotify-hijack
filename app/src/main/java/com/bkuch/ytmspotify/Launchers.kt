@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Parcelable
 import android.provider.Browser
+import android.widget.Toast
 
 object Launchers {
     const val SPOTIFY = "com.spotify.music"
@@ -49,42 +49,50 @@ object Launchers {
         openInBrowser(context, browserUrl)
     }
 
-    /** Opens a URL in the browser (default one if set), never in this app. */
+    /**
+     * Opens a URL in the browser (default one if set), never in this app.
+     *
+     * Once this app is approved for the YouTube domains, Android 12+ drops browsers from the
+     * resolution of YouTube URLs, so an implicit intent or chooser finds nothing ("No apps can
+     * perform this action"). We therefore resolve the browser's generic web handler with a
+     * neutral URL and target that exact component, which skips domain filtering.
+     */
     private fun openInBrowser(context: Context, url: String) {
-        val view = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
-        browserPackage(context)?.let { pkg ->
-            val direct = Intent(view)
-                .setPackage(pkg)
+        for (component in browserComponents(context)) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setComponent(component)
                 // Lets Chrome reuse one tab for links coming from this app.
                 .putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             try {
-                context.startActivity(direct)
+                context.startActivity(intent)
                 return
             } catch (e: ActivityNotFoundException) {
-                // fall back to the chooser
+                // try the next browser
+            } catch (e: SecurityException) {
+                // try the next browser
             }
         }
-        val chooser = Intent.createChooser(view, null)
-            .putExtra(
-                Intent.EXTRA_EXCLUDE_COMPONENTS,
-                arrayOf<Parcelable>(ComponentName(context, HijackActivity::class.java)),
-            )
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(chooser)
+        Toast.makeText(context, R.string.no_browser, Toast.LENGTH_LONG).show()
     }
 
-    /** The default browser, else Chrome, else any browser. Never this app. */
-    private fun browserPackage(context: Context): String? {
+    /** Browser web-link activities: the default browser first, then Chrome, then the rest. */
+    private fun browserComponents(context: Context): List<ComponentName> {
         val probe = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))
             .addCategory(Intent.CATEGORY_BROWSABLE)
         val pm = context.packageManager
+        val all = pm.queryIntentActivities(probe, 0)
+            .map { it.activityInfo }
+            .filter { it.packageName != context.packageName }
         val default = pm.resolveActivity(probe, PackageManager.MATCH_DEFAULT_ONLY)
             ?.activityInfo?.packageName
-        // With no default set this resolves to the system chooser ("android").
-        if (default != null && default != "android" && default != context.packageName) return default
-        val all = pm.queryIntentActivities(probe, 0).map { it.activityInfo.packageName }
-            .filter { it != context.packageName }
-        return all.firstOrNull { it == "com.android.chrome" } ?: all.firstOrNull()
+        return all.sortedBy {
+            when (it.packageName) {
+                default -> 0
+                "com.android.chrome" -> 1
+                else -> 2
+            }
+        }.map { ComponentName(it.packageName, it.name) }
     }
 }

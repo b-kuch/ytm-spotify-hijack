@@ -10,6 +10,7 @@
     <string name="open_spotify">Spotify now</string>
     <string name="no_link">No link found</string>
     <string name="not_youtube">Not a YouTube link</string>
+    <string name="no_browser">No browser found to open the link</string>
     <string name="not_music">Doesn\'t look like music — opening YouTube</string>
 
     <string name="enabled">Redirect YouTube links to Spotify</string>
