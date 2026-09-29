@@ -47,4 +47,23 @@ CI (`.github/workflows/build.yml`) runs unit tests and builds a debug APK on eve
 
 Locally: `./gradlew assembleDebug` (needs the Android SDK, compileSdk 35). Output: `app/build/outputs/apk/debug/app-debug.apk`.
 
-Note: CI debug builds are signed with a fresh debug key each run, so installing a newer build may require uninstalling the old one first.
+### Signing (so new builds install as updates)
+
+Android only installs an APK over an existing one if both are signed with the same key. CI signs with a key from repository secrets; without them each run uses a throwaway key and you must uninstall before installing a newer build. One-time setup on any machine with Java:
+
+```sh
+keytool -genkeypair -keystore signing.keystore -storetype PKCS12 -alias ytmhijack \
+  -keyalg RSA -keysize 2048 -validity 36500 -dname "CN=ytm-spotify-hijack"
+base64 -w0 signing.keystore   # macOS: base64 -i signing.keystore
+```
+
+Then in GitHub → Settings → Secrets and variables → Actions add:
+
+| Secret | Value |
+| --- | --- |
+| `SIGNING_KEYSTORE_BASE64` | the base64 output |
+| `SIGNING_STORE_PASSWORD` | the keystore password you chose |
+| `SIGNING_KEY_ALIAS` | `ytmhijack` |
+| `SIGNING_KEY_PASSWORD` | same as the store password (PKCS12) |
+
+Keep `signing.keystore` somewhere safe and never commit it. The version code is the CI run number, so every build is newer than the last.
